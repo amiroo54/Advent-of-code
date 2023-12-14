@@ -35,6 +35,18 @@ fun printPattern(pattern: MutableList<MutableList<Char>>): Unit
     }
 }
 
+fun compareLines(linea: MutableList<Char>, lineb: MutableList<Char>): Int
+{
+    var diff: Int = 0
+    for (char in 0..linea.size - 1)
+    {  
+        if (linea[char] != lineb[char])
+        {
+            diff += 1
+        }
+    }
+    return diff
+}
 
 fun rotatePattern(pattern: MutableList<MutableList<Char>>): MutableList<MutableList<Char>>
 {
@@ -55,21 +67,16 @@ fun getMirrorLine(pattern: MutableList<MutableList<Char>>): MutableList<Int>
     var out: MutableList<Int> = mutableListOf()
     for (line in 0..pattern.size - 2)
     {
-        if (pattern[line] == pattern[line + 1])
+        var dis1: Int = line
+        var dis2: Int = pattern.size - line
+        val distanceToClosestEdge = min(line, pattern.size - line - 2)
+        var isThisLineMirror = true
+        var smudges: Int = 0
+        for (i in 0..distanceToClosestEdge)
         {
-            var dis1: Int = line
-            var dis2: Int = pattern.size - line
-            val distanceToClosestEdge = min(line, pattern.size - line - 2)
-            var isThisLineMirror = true
-            for (i in 0..distanceToClosestEdge)
-            {
-                if (pattern[line - i] != pattern[line + i + 1])
-                {
-                    isThisLineMirror = false
-                }
-            }
-            if (isThisLineMirror){out.add(line + 1)}
+            smudges += compareLines(pattern[line - i], pattern[line + i + 1])
         }
+        if (smudges == 1){out.add(line + 1)}
     }
     return out //1 -> fix indexing error.
 }
