@@ -135,9 +135,6 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	platform := make([][]rune, 0)
 
-	hashes := make([][]byte, 0)
-
-	hashes = append(hashes, Hash(platform))
 	for scanner.Scan() {
 		var rowText = scanner.Text()
 		row := make([]rune, 0)
@@ -147,16 +144,8 @@ func main() {
 		platform = append(platform, row)
 	}
 
-	var foundHash bool = false
-
-	for !foundHash {
-		platform = doACycle(platform)
-		thisHash := Hash(platform)
-		for _, hash := range hashes {
-			if CompareHash(hash, Hash(thisHash)) {
-				fmt.Println("found pattern")
-			}
-		}
-		hashes = append(hashes, thisHash)
+	for i := 0; i < 1000; i++ {
+		doACycle(platform)
 	}
+	fmt.Println(getPlatformLoad(platform))
 }
